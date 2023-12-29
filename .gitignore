@@ -1,0 +1,4 @@
+.venv
+psql_data/
+.idea/
+
