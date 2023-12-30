@@ -6,10 +6,19 @@ class Category(models.Model):
 	description = models.CharField(max_length=255, blank=True)
 	top_product = models.ForeignKey('Product', on_delete=models.SET_NULL, null=True, related_name='+')
 
+	class Meta:
+		verbose_name_plural = 'categories'
+
+	def __str__(self):
+		return self.title
+
 
 class Discount(models.Model):
 	discount = models.FloatField()
 	description = models.CharField(max_length=255)
+
+	def __str__(self):
+		return F"{self.discount} | {str(self.description)}"
 
 
 class Product(models.Model):
@@ -23,6 +32,9 @@ class Product(models.Model):
 	date_created = models.DateTimeField(auto_now_add=True)
 	date_modified = models.DateTimeField(auto_now=True)
 
+	def __str__(self):
+		return self.name
+
 
 class Customer(models.Model):
 	first_name = models.CharField(max_length=255)
@@ -30,6 +42,9 @@ class Customer(models.Model):
 	email = models.EmailField()
 	phone = models.CharField(max_length=11)
 	birth_date = models.DateField(blank=True, null=True)
+
+	def __str__(self):
+		return self.first_name + ' ' + self.last_name
 
 
 class Order(models.Model):
@@ -46,6 +61,9 @@ class Order(models.Model):
 	datetime_created = models.DateTimeField(auto_now_add=True)
 	status = models.CharField(max_length=1, choices=ORDER_STATUS_CHOICES, default=ORDER_STATUS_UNPAID)
 
+	def __str__(self):
+		return F"{self.__class__.__name__}={self.id}"
+
 
 class OrderItem(models.Model):
 	product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name='order_items')
@@ -55,6 +73,9 @@ class OrderItem(models.Model):
 
 	class Meta:
 		unique_together = [['product', 'order']]
+
+	def __str__(self):
+		return self.product.name
 
 
 class Comment(models.Model):
@@ -70,7 +91,10 @@ class Comment(models.Model):
 	name = models.CharField(max_length=255)
 	body = models.TextField()
 	datetime_created = models.DateTimeField(auto_now_add=True)
-	status = models.CharField(max_length=2, default=COMMENT_STATUS_WAITING)
+	status = models.CharField(max_length=2, choices=COMMENT_STATUS_CHOICES, default=COMMENT_STATUS_WAITING)
+
+	def __str__(self):
+		return self.name
 
 
 class Address(models.Model):
@@ -78,6 +102,9 @@ class Address(models.Model):
 	province = models.CharField(max_length=255)
 	city = models.CharField(max_length=255)
 	street = models.CharField(max_length=255)
+
+	def __str__(self):
+		return self.province
 
 
 class Cart(models.Model):
@@ -91,4 +118,5 @@ class CartItem(models.Model):
 
 	class Meta:
 		unique_together = [['cart', 'product']]
+
 
