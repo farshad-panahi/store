@@ -1,8 +1,8 @@
-<div style="display: flex;justify-content: space-evenly;height: 100px;margin:50px 0">
-<img src="https://skillicons.dev/icons?i=django"  alt="django logo"/>
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg"  alt="postgresql logo" />
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg"  alt="docker logo"  />
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"  alt="docker logo"  />
+<div style="display: flex;justify-content: space-evenly;margin:50px 0">
+<img src="https://skillicons.dev/icons?i=django" height="50px" alt="django logo"/>
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" height="50px" alt="postgresql logo" />
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" height="50px" alt="docker logo"  />
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" height="50px" alt="docker logo"  />
 </div>
 <h1 style="border-radius: 10px;padding:0 20px; color: white;background-color: #163020;display: inline-block; letter-spacing: 8px;">Store</h1>
 <p style="color: darkcyan;background-color: #323232;padding: 20px;border-radius: 20px;font-weight: 900">As you guess and project's name says, This is an online shop project that 
