@@ -18,7 +18,7 @@ class Discount(models.Model):
 	description = models.CharField(max_length=255)
 
 	def __str__(self):
-		return F"{self.discount} | {str(self.description)}"
+		return F"{str(self.discount)} | {self.description}"
 
 
 class Product(models.Model):
@@ -118,5 +118,3 @@ class CartItem(models.Model):
 
 	class Meta:
 		unique_together = [['cart', 'product']]
-
-
