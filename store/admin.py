@@ -40,8 +40,20 @@ class InventoryFilter(admin.SimpleListFilter):
 class CustomerAdmin(admin.ModelAdmin):
 	list_display = ['first_name', 'last_name', 'email']
 	list_per_page = 20
-	ordering = ('first_name', 'last_name', 'email')
-	search_fields = ['first_name', 'last_name', ]
+	ordering = ('user__first_name', 'user__last_name', 'user__email')
+	search_fields = ['user__first_name', 'user__last_name', ]
+
+	@staticmethod
+	def first_name(customer):
+		return customer.user.first_name
+
+	@staticmethod
+	def last_name(customer):
+		return customer.user.last_name
+
+	@staticmethod
+	def email(customer):
+		return customer.user.email
 
 
 @admin.register(models.Product)
@@ -142,3 +154,16 @@ class CommentAdmin(admin.ModelAdmin):
 	autocomplete_fields = ['product', ]
 	list_display_links = ['id', 'product']
 
+
+class CartItemInline(admin.TabularInline):
+	model = models.CartItem
+	fields = ['cart', 'product', 'quantity']
+	extra = 1
+	min_num = 1
+	max_num = 100
+
+
+@admin.register(models.Cart)
+class CartAdmin(admin.ModelAdmin):
+	list_display = ['id', 'datetime_created']
+	inlines = [CartItemInline, ]

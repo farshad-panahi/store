@@ -1,5 +1,7 @@
 from django.db import models
 from uuid import uuid4
+from django.conf import settings
+
 
 class Category(models.Model):
 	title = models.CharField(max_length=255)
@@ -37,14 +39,12 @@ class Product(models.Model):
 
 
 class Customer(models.Model):
-	first_name = models.CharField(max_length=255)
-	last_name = models.CharField(max_length=255)
-	email = models.EmailField()
+	user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
 	phone = models.CharField(max_length=11)
 	birth_date = models.DateField(blank=True, null=True)
 
 	def __str__(self):
-		return self.first_name + ' ' + self.last_name
+		return self.user.first_name + ' ' + self.user.last_name
 
 
 class Order(models.Model):

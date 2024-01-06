@@ -1,13 +1,16 @@
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, DestroyModelMixin
 from rest_framework.response import Response
 from .filters import ProductFilterSet
-from .models import Product, Category, Comment
-from .serializers import ProductSerializer, CategorySerializer, CommentSerializer
-from rest_framework.viewsets import ModelViewSet
+from .serializers import ProductSerializer, CategorySerializer, CommentSerializer, CartSerializer, CartItemSerializer, \
+	AddCartItemSerializer, UpdateCartItemSerializer
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
 from .paginations import DefaultPageination
+
+from .models import Product, Category, Comment, Cart, CartItem
 
 
 class ProductViewSet(ModelViewSet):
@@ -44,7 +47,7 @@ class CategoryViewSet(ModelViewSet):
 	serializer_class = CategorySerializer
 	queryset = Category.objects.prefetch_related('products').all()
 
-	def destroy(self, request, pk):
+	def destroy(self, request, pk, ):
 		category = get_object_or_404(Category.objects.prefetch_related('products'), pk=pk)
 		if category.products.count() > 0:
 			return Response(
@@ -65,3 +68,29 @@ class CommentViewSet(ModelViewSet):
 		return {
 			'product_pk': self.kwargs['product_pk']
 		}
+
+
+class CartItemViewSet(ModelViewSet):
+	http_method_names = ['get', 'post', 'patch', 'delete']
+	def get_queryset(self):
+		cart_pk = self.kwargs['cart_pk']
+		return CartItem.objects.filter(cart_id=cart_pk).all()
+
+	def get_serializer_class(self):
+		if self.request.method == 'POST':
+			return AddCartItemSerializer
+
+		elif self.request.method == 'PATCH':
+			return UpdateCartItemSerializer
+
+		return CartItemSerializer
+
+	def get_serializer_context(self):
+		return {'cart_pk': self.kwargs['cart_pk']}
+
+
+class CartViewSet(CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, GenericViewSet):
+	serializer_class = CartSerializer
+	queryset = Cart.objects.prefetch_related('items__product').all()
+
+	lookup_value_regex = '[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}'
